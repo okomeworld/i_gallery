@@ -1,0 +1,26 @@
+@charset "utf-8";
+
+@mixin clearfix{
+	&:after{
+		display: block;
+		visibility: hidden;
+		clear: both;
+		height: 0;
+		content: "";
+	}
+}
+
+@mixin box-sizing{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+@mixin absPosition ($top: auto, $right: auto, $bottom: auto, $left: auto, $z: 10){
+	position: absolute;
+	top: $top;
+	right: $right;
+	bottom: $bottom;
+	left: $left;
+	z-index: $z;
+}

@@ -1,0 +1,137 @@
+﻿@charset 'utf-8';
+/*----------------------------------
+	base
+----------------------------------*/
+body{
+	font-family: 'Josefin Slab','ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
+	font-size: 10px;
+	font-weight: 600;
+	line-height: 1.5;
+	width: 100%;
+	height: 100%;
+	min-height: 100%!important;
+	text-align: center;
+	color: $base_color;
+	background: #fff;
+}
+
+a{
+	text-decoration: underline;
+	color: #00f;
+	&:hover{
+		color: #f00;
+	}
+}
+
+h1,
+h2,
+h3,
+h4{
+	font-weight: 600;
+}
+
+h1 a{
+	text-decoration: none;
+	color: $base_color;
+	font-size: 24px;
+}
+
+.search_box{
+	margin: 10px auto 20px;
+
+	label{
+		display: inline-block;
+	}
+
+	select{
+		font-size: 14px;
+		vertical-align: middle;
+		margin-right: 20px;
+	}
+}
+
+#gallery {
+	.box{
+		font-size: 12px;
+		display: none;
+		margin: 15px;
+		img{
+			@include box-sizing;
+			width: 200px;
+			height: auto;
+			-webkit-border-radius: 10px;
+			-webkit-box-shadow: 0px 0px 1px rgba(#000,.8);
+			overflow: hidden;
+		}
+	}
+
+	.anime_in{
+		display: inline-block;
+		-webkit-animation: anime_in .5s;
+
+		img{
+			//-webkit-animation: animeImg_in .5s;
+		}
+	}
+}
+
+
+@media screen and (max-width: 640px) {
+	.search_box{
+
+		select{
+			font-size: 10px;
+			vertical-align: middle;
+			margin-right: 5px;
+		}
+	}
+
+	#gallery{
+		.box{
+			font-size: 10px;
+			margin: 10px;
+			img{
+				width: 80px;
+				height: auto;
+			}
+		}
+	}
+}
+
+.exBox{
+	position: absolute;
+	z-index: 1000;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	-webkit-animation: exBox_in .2s;
+	background-color: rgba(#000, .8);
+	img{
+		max-width: 100%;
+		max-height: 100%;
+		vertical-align: middle;
+		-webkit-box-shadow: 0px 0px 10px rgba(#000,.8);
+	}
+
+	.anime_in{
+		-webkit-animation: anime_in .5s;
+	}
+}
+
+@-webkit-keyframes exBox_in{
+	0% { opacity: 0; }
+	100%{ opacity: 1; }
+}
+
+@-webkit-keyframes anime_in {
+	0% { -webkit-transform: scale(0, 0); }
+	50% { -webkit-transform: scale(1.1, 1.1); }
+	100%{ -webkit-transform: scale(1, 1); }
+}
+
+@-webkit-keyframes animeImg_in {
+	0% { -webkit-transform: rotate(-180deg); }
+	50% { -webkit-transform: rotate(10deg); }
+	100%{ -webkit-transform: rotate(0deg); }
+}

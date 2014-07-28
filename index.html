@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="robots" content="noindex,nofollow" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<meta http-equiv="Pragma" content="no-cache" />
+<title>iGallery</title>
+<link href='http://fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="inc/css/inc_sc.css" />
+<script type="text/javascript" src="inc/js/library/jquery-2.1.1.js"></script>
+<script type="text/javascript" src="inc/js/app.namespace.js"></script>
+<script type="text/javascript" src="inc/js/app.databind.js"></script>
+<script type="text/javascript" src="inc/js/app.gallery.js"></script>
+<script type="text/javascript" src="inc/js/app.js"></script>
+</head>
+<body>
+
+<div id="loading">
+	<div id="floatingCirclesG">
+		<div class="f_circleG" id="frotateG_01"></div>
+		<div class="f_circleG" id="frotateG_02"></div>
+		<div class="f_circleG" id="frotateG_03"></div>
+		<div class="f_circleG" id="frotateG_04"></div>
+		<div class="f_circleG" id="frotateG_05"></div>
+		<div class="f_circleG" id="frotateG_06"></div>
+		<div class="f_circleG" id="frotateG_07"></div>
+		<div class="f_circleG" id="frotateG_08"></div>
+	</div>
+</div>
+
+<div id="wrap">
+	<header id="header">
+		<h1><a href="/">iGallery</a></h1>
+		<div class="search_box">
+			<label>
+				Category:
+				<select name="" id="category">
+						<option value="all">ALL</option>
+					</select>
+			</label>
+
+			<label>
+				Name:
+				<select name="" id="name">
+					<option value="all">ALL</option>
+				</select>
+			</label>
+		</div>
+	</header>
+
+	<ul id="gallery" class="list">
+	</ul>
+</div>
+</body>
+</html>

@@ -18,10 +18,3 @@
 		-webkit-animation: loading_anime 2.0s infinite;
 	}
 }
-
-
-@-webkit-keyframes loading_anime{
-	0% { opacity: 0; }
-	50% { opacity: 1; }
-	100%{ opacity: 0; }
-}

@@ -76,29 +76,6 @@ h1 a{
 	}
 }
 
-
-@media screen and (max-width: 640px) {
-	.search_box{
-
-		select{
-			font-size: 10px;
-			vertical-align: middle;
-			margin-right: 5px;
-		}
-	}
-
-	#gallery{
-		.box{
-			font-size: 10px;
-			margin: 10px;
-			img{
-				width: 80px;
-				height: auto;
-			}
-		}
-	}
-}
-
 .exBox{
 	position: absolute;
 	z-index: 1000;
@@ -120,21 +97,4 @@ h1 a{
 		display: inline;
 		-webkit-animation: anime_in .5s;
 	}
-}
-
-@-webkit-keyframes exBox_in{
-	0% { opacity: 0; }
-	100%{ opacity: 1; }
-}
-
-@-webkit-keyframes anime_in {
-	0% { -webkit-transform: scale(0, 0); }
-	50% { -webkit-transform: scale(1.1, 1.1); }
-	100%{ -webkit-transform: scale(1, 1); }
-}
-
-@-webkit-keyframes animeImg_in {
-	0% { -webkit-transform: rotate(-180deg); }
-	50% { -webkit-transform: rotate(10deg); }
-	100%{ -webkit-transform: rotate(0deg); }
 }

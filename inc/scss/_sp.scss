@@ -1,0 +1,25 @@
+@charset 'utf-8';
+/*----------------------------------
+	sp
+----------------------------------*/
+@media screen and (max-width: 640px) {
+	.search_box{
+
+		select{
+			font-size: 10px;
+			vertical-align: middle;
+			margin-right: 5px;
+		}
+	}
+
+	#gallery{
+		.box{
+			font-size: 10px;
+			margin: 10px;
+			img{
+				width: 80px;
+				height: auto;
+			}
+		}
+	}
+}

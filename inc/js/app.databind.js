@@ -72,6 +72,7 @@ App.DataBind = (function(window,$){
 				}else{
 					_case2(data,value,'member_name',valueCategory,'item_category');
 				}
+				that.addClassLastBox();
 				that.anime();
 			})
 
@@ -83,6 +84,7 @@ App.DataBind = (function(window,$){
 				}else{
 					_case2(data,value,'item_category',valueName,'member_name');
 				}
+				that.addClassLastBox();
 				that.anime();
 			})
 

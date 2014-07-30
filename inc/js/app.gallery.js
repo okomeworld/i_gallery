@@ -9,7 +9,6 @@ App.Gallery = (function(window,$){
 		init: function(){
 			var that = this;
 			var $document = $(document);
-			this.preload();
 
 			$document.on('click', '.expand', function(e) {
 				e.preventDefault();
@@ -25,8 +24,10 @@ App.Gallery = (function(window,$){
 		},
 
 		preload: function(){
-			$('.expand').each(function() {
-				$('<img />').attr('src', $(this).attr('src'));
+			$('.expand img').each(function() {
+				var src = $(this).attr('src');
+				var src = src.replace('/t/','/b/')
+				$('<img />').attr('src', src);
 			});
 		},
 

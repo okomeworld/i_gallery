@@ -9,14 +9,13 @@ $(function(){
 			App.DataBind.init(json);
 		},
 		complete: function(json){
-			App.DataBind.anime();
 			App.Gallery.init();
-			App.DataBind.removeLoading();
+			$(".last img").load(function(){
+				App.DataBind.removeLoading();
+				App.DataBind.anime();
+			});
 		}
 	});
-
-	window.onload = function(){
-	}
 
 });
 

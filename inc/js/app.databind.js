@@ -30,6 +30,7 @@ App.DataBind = (function(window,$){
 			this.getDataAll(data);
 			this.change(data);
 			this.addSelectList.init(data);
+			this.addClassLastBox();
 		},
 
 		addSelectList:{
@@ -145,6 +146,10 @@ App.DataBind = (function(window,$){
 			for (var i = 0; i < len; i++) {
 				new _Item(dataFilter,i,$_list);
 			};
+		},
+
+		addClassLastBox :function(){
+			$('.box:last-child').addClass('last');
 		},
 
 		anime: function(){

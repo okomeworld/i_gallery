@@ -1,7 +1,9 @@
 $(function(){
 
-	App.DataBind.init();
-	App.DataBind.change.init();
+	var JSON_PATH = 'inc/data/data.json';
+
+	App.DataBind.init(JSON_PATH);
+	App.DataBind.change.init(JSON_PATH);
 	App.Gallery.init();
 
 });

@@ -25,11 +25,11 @@ App.DataBind = (function(window,$){
 
 	var _DataBind = {
 
-		init: function(){
+		init: function(jsonPath){
 			var that = this;
 
 			$.ajax({
-				url: '/inc/data/data.json',
+				url: jsonPath,
 				type: 'GET',
 				cache: false,
 				dataType: 'json',
@@ -52,7 +52,7 @@ App.DataBind = (function(window,$){
 
 		change:{
 
-			init: function(){
+			init: function(jsonPath){
 				var nameAlias = App.DataBind;
 				var that = this;
 				var $name = $('#name');
@@ -62,22 +62,22 @@ App.DataBind = (function(window,$){
 					var value = $(this).val();
 					var othrValue = $category.val();
 					nameAlias.showLoading();
-					that.ajax(value,'member_name',othrValue,'item_category',nameAlias);
+					that.ajax(value,'member_name',othrValue,'item_category',nameAlias,jsonPath);
 				});
 
 				$category.on('change',function(){
 					var value = $(this).val();
 					var othrValue = $name.val();
 					nameAlias.showLoading();
-					that.ajax(value,'item_category',othrValue,'member_name',nameAlias);
+					that.ajax(value,'item_category',othrValue,'member_name',nameAlias,jsonPath);
 				});
 			},
 
-			ajax: function(value,property,othrValue,otherProperty,nameAlias){
+			ajax: function(value,property,othrValue,otherProperty,nameAlias,jsonPath){
 				var that = this;
 
 				$.ajax({
-					url: '/inc/data/data.json',
+					url: jsonPath,
 					type: 'GET',
 					cache: false,
 					dataType: 'json',

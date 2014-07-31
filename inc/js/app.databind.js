@@ -25,12 +25,156 @@ App.DataBind = (function(window,$){
 
 	var _DataBind = {
 
-		init: function(json){
-			var data = json;
-			this.getDataAll(data);
-			this.change(data);
-			this.addSelectList.init(data);
-			this.addClassLastBox();
+		init: function(){
+			var that = this;
+			$.ajax({
+				url: '/inc/data/data.json',
+				type: 'GET',
+				cache: false,
+				dataType: 'json',
+				success: function(json){
+					that.getDataAll(json);
+					that.addSelectList.init(json);
+					that.addClassLastBox();
+				},
+				complete: function(json){
+					$(".last img").load(function(){
+						that.removeLoading();
+						that.anime();
+					});
+				}
+			});
+		},
+
+		change:{
+
+			init: function(){
+				var nameAlias = App.DataBind;
+				var that = this;
+				var $name = $('#name');
+				var $category = $('#category');
+				$name .on('change submit',function(){
+					var value = $(this).val();
+					var othrValue = $category.val();
+					nameAlias.showLoading();
+					that.ajax(value,'member_name',othrValue,'item_category',nameAlias);
+				});
+
+				$category.on('change',function(){
+					var value = $(this).val();
+					var othrValue = $name.val();
+					nameAlias.showLoading();
+					that.ajax(value,'item_category',othrValue,'member_name',nameAlias);
+				});
+			},
+
+			ajax: function(value,property,othrValue,otherProperty,nameAlias){
+				var that = this;
+
+				$.ajax({
+					url: '/inc/data/data.json',
+					type: 'GET',
+					cache: false,
+					dataType: 'json',
+					success: function(json){
+						if(othrValue == 'all'){
+							that.case_single(json,value,property,nameAlias);
+						}else{
+							that.case_dual(json,value,property,othrValue,otherProperty,nameAlias);
+						}
+						nameAlias.addClassLastBox();
+					},
+					complete: function(){
+						$(".last img").load(function(){
+							nameAlias.removeLoading();
+							nameAlias.anime();
+						});
+					}
+				});
+			},
+
+			case_single: function(data,value,property,nameAlias){
+				if(value == 'all'){
+					nameAlias.getDataAll(data);
+				}else{
+					nameAlias.getDataFilter(data,value,property);
+				}
+			},
+
+			case_dual: function(data,value,property,othrValue,otherProperty,nameAlias){
+				if(value == 'all' && othrValue == 'all'){
+					nameAlias.getDataAll(data);
+				}else if(value == 'all' || othrValue == 'all'){
+					nameAlias.getDataFilter(data,othrValue,otherProperty);
+				}else{
+					nameAlias.getDataPluralFilter(data,value,property,othrValue,otherProperty);
+				}
+			}
+		},
+
+		getDataAll: function(data){
+			var dataFilter = data;
+			this.display(dataFilter);
+		},
+
+		getDataFilter: function(data,value,property){
+			var dataAll = data;
+			var dataFilter = [];
+			var str = new RegExp(value,'i');
+			dataFilter = dataAll.filter(function(item,index){
+				if(item[property].match(str)){
+					return true;
+				};
+			});
+			this.display(dataFilter);
+		},
+
+		getDataPluralFilter: function(data,value,property,othrValue,otherProperty){
+			var dataAll = data;
+			var dataFilter = [];
+			var _str = new RegExp(othrValue,'i');
+			var str = new RegExp(value,'i');
+			dataFilter = dataAll.filter(function(item,index){
+				if(item[otherProperty].match(_str)){
+					return true;
+				};
+			}).filter(function(item,index){
+				if (item[property].match(str)){
+					return true;
+				};
+			});
+
+			if(dataFilter.length === 0){
+				this.removeLoading();
+			}
+
+			this.display(dataFilter);
+		},
+
+		display: function(dataFilter){
+			var len = dataFilter.length;
+			var $_list = $('#gallery');
+			$_list.empty();
+			for (var i = 0; i < len; i++) {
+				new _Item(dataFilter,i,$_list);
+			};
+		},
+
+		addClassLastBox :function(){
+			$('.box:last-child').addClass('last');
+		},
+
+		anime: function(){
+			var $box = $('.box');
+			$box.addClass('anime_in');
+		},
+
+		showLoading: function(){
+			$('#loading').show();
+		},
+
+		removeLoading: function(){
+			$('#loading').fadeOut();
 		},
 
 		addSelectList:{
@@ -58,110 +202,6 @@ App.DataBind = (function(window,$){
 				}
 			}
 		},
-
-		change: function(data){
-			var that = this;
-			var $name = $('#name');
-			var $category = $('#category');
-
-			$name .on('change submit',function(){
-				var value = $(this).val();
-				var valueCategory = $category.val();
-				if(valueCategory == 'all'){
-					_case(data,'member_name',value);
-				}else{
-					_case2(data,value,'member_name',valueCategory,'item_category');
-				}
-				that.addClassLastBox();
-				that.anime();
-			})
-
-			$category.on('change',function(){
-				var value = $(this).val();
-				var valueName = $name .val();
-				if(valueName == 'all'){
-					_case(data,'item_category',value);
-				}else{
-					_case2(data,value,'item_category',valueName,'member_name');
-				}
-				that.addClassLastBox();
-				that.anime();
-			})
-
-			function _case(data,subject,value){
-				if(value == 'all'){
-					that.getDataAll(data);
-				}else{
-					that.getDataFilter(data,value,subject);
-				}
-			}
-
-			function _case2(data,value,subject,_value,_subject){
-				if(value == 'all' && _value == 'all'){
-					that.getDataAll(data);
-				}else if(value == 'all' || _value == 'all'){
-					that.getDataFilter(data,_value,_subject);
-				}else{
-					that.getDataPluralFilter(data,value,subject,_value,_subject);
-				}
-			}
-		},
-
-		getDataAll: function(data){
-			var dataFilter = data;
-			this.display(dataFilter);
-		},
-
-		getDataFilter: function(data,value,subject){
-			var dataAll = data;
-			var dataFilter = [];
-			var str = new RegExp(value,'i');
-			dataFilter = dataAll.filter(function(item,index){
-				if(item[subject].match(str)){
-					return true;
-				};
-			});
-			this.display(dataFilter);
-		},
-
-		getDataPluralFilter: function(data,value,subject,_value,_subject){
-			var dataAll = data;
-			var dataFilter = [];
-			var _str = new RegExp(_value,'i');
-			var str = new RegExp(value,'i');
-			dataFilter = dataAll.filter(function(item,index){
-				if(item[_subject].match(_str)){
-					return true;
-				};
-			}).filter(function(item,index){
-				if (item[subject].match(str)){
-					return true;
-				};
-			});
-			this.display(dataFilter);
-		},
-
-		display: function(dataFilter){
-			var len = dataFilter.length;
-			var $_list = $('#gallery');
-			$_list.empty();
-			for (var i = 0; i < len; i++) {
-				new _Item(dataFilter,i,$_list);
-			};
-		},
-
-		addClassLastBox :function(){
-			$('.box:last-child').addClass('last');
-		},
-
-		anime: function(){
-			var $box = $('.box');
-			$box.addClass('anime_in');
-		},
-
-		removeLoading: function(){
-			$('#loading').fadeOut();
-		}
 	}
 
 	return _DataBind;

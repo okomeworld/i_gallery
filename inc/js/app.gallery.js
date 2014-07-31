@@ -23,14 +23,6 @@ App.Gallery = (function(window,$){
 			});
 		},
 
-		preload: function(){
-			$('.expand img').each(function() {
-				var src = $(this).attr('src');
-				var src = src.replace('/t/','/b/')
-				$('<img />').attr('src', src);
-			});
-		},
-
 		addImg: function($self){
 			var $window = $(window);
 			var $body = $('body');

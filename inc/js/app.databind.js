@@ -44,6 +44,7 @@ App.DataBind = (function(window,$){
 					$lastImg.load(function(){
 						that.removeLoading();
 						that.anime();
+						that.preload();
 					});
 				}
 			});
@@ -210,6 +211,14 @@ App.DataBind = (function(window,$){
 					$selector.append("<option value='" + array[i] + "'>" + array[i] + "</option>");
 				}
 			}
+		},
+
+		preload: function(){
+			$('.expand img').each(function() {
+				var src = $(this).attr('src');
+				var src = src.replace('/t/','/b/')
+				$('<img />').attr('src', src);
+			});
 		},
 	}
 

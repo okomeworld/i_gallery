@@ -27,6 +27,7 @@ App.DataBind = (function(window,$){
 
 		init: function(){
 			var that = this;
+
 			$.ajax({
 				url: '/inc/data/data.json',
 				type: 'GET',
@@ -38,7 +39,9 @@ App.DataBind = (function(window,$){
 					that.addClassLastBox();
 				},
 				complete: function(json){
-					$(".last img").load(function(){
+					var $lastImg = $(".last img");
+
+					$lastImg.load(function(){
 						that.removeLoading();
 						that.anime();
 					});
@@ -53,6 +56,7 @@ App.DataBind = (function(window,$){
 				var that = this;
 				var $name = $('#name');
 				var $category = $('#category');
+
 				$name .on('change submit',function(){
 					var value = $(this).val();
 					var othrValue = $category.val();
@@ -85,7 +89,8 @@ App.DataBind = (function(window,$){
 						nameAlias.addClassLastBox();
 					},
 					complete: function(){
-						$(".last img").load(function(){
+						var $lastImg = $(".last img");
+						$lastImg.load(function(){
 							nameAlias.removeLoading();
 							nameAlias.anime();
 						});
@@ -132,10 +137,10 @@ App.DataBind = (function(window,$){
 		getDataPluralFilter: function(data,value,property,othrValue,otherProperty){
 			var dataAll = data;
 			var dataFilter = [];
-			var _str = new RegExp(othrValue,'i');
+			var otherStr = new RegExp(othrValue,'i');
 			var str = new RegExp(value,'i');
 			dataFilter = dataAll.filter(function(item,index){
-				if(item[otherProperty].match(_str)){
+				if(item[otherProperty].match(otherStr)){
 					return true;
 				};
 			}).filter(function(item,index){
@@ -146,6 +151,7 @@ App.DataBind = (function(window,$){
 
 			if(dataFilter.length === 0){
 				this.removeLoading();
+				alert('データがありません');
 			}
 
 			this.display(dataFilter);
@@ -161,7 +167,8 @@ App.DataBind = (function(window,$){
 		},
 
 		addClassLastBox :function(){
-			$('.box:last-child').addClass('last');
+			var $box_last = $('.box:last-child');
+			$box_last.addClass('last');
 		},
 
 		anime: function(){
@@ -170,11 +177,13 @@ App.DataBind = (function(window,$){
 		},
 
 		showLoading: function(){
-			$('#loading').show();
+			var $loading = $('#loading');
+			$loading.show();
 		},
 
 		removeLoading: function(){
-			$('#loading').fadeOut();
+			var $loading = $('#loading');
+			$loading.fadeOut();
 		},
 
 		addSelectList:{

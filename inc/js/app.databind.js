@@ -4,6 +4,8 @@
 
 App.DataBind = (function(window,$){
 
+	var nameAlias = App.DataBind;
+
 	function _Item(dataFilter,i,$_list){
 		this.member_id = dataFilter[i].member_id;
 		this.member_name = dataFilter[i].member_name;
@@ -52,8 +54,10 @@ App.DataBind = (function(window,$){
 
 		change:{
 
+			_nameAlias: nameAlias,
+
 			init: function(jsonPath){
-				var nameAlias = App.DataBind;
+				var _nameAlias = App.DataBind;
 				var that = this;
 				var $name = $('#name');
 				var $category = $('#category');
@@ -61,19 +65,19 @@ App.DataBind = (function(window,$){
 				$name .on('change submit',function(){
 					var value = $(this).val();
 					var othrValue = $category.val();
-					nameAlias.showLoading();
-					that.ajax(value,'member_name',othrValue,'item_category',nameAlias,jsonPath);
+					_nameAlias.showLoading();
+					that.ajax(value,'member_name',othrValue,'item_category',_nameAlias,jsonPath);
 				});
 
 				$category.on('change',function(){
 					var value = $(this).val();
 					var othrValue = $name.val();
-					nameAlias.showLoading();
-					that.ajax(value,'item_category',othrValue,'member_name',nameAlias,jsonPath);
+					_nameAlias.showLoading();
+					that.ajax(value,'item_category',othrValue,'member_name',_nameAlias,jsonPath);
 				});
 			},
 
-			ajax: function(value,property,othrValue,otherProperty,nameAlias,jsonPath){
+			ajax: function(value,property,othrValue,otherProperty,_nameAlias,jsonPath){
 				var that = this;
 
 				$.ajax({
@@ -83,37 +87,37 @@ App.DataBind = (function(window,$){
 					dataType: 'json',
 					success: function(json){
 						if(othrValue == 'all'){
-							that.case_single(json,value,property,nameAlias);
+							that.case_single(json,value,property,_nameAlias);
 						}else{
-							that.case_dual(json,value,property,othrValue,otherProperty,nameAlias);
+							that.case_dual(json,value,property,othrValue,otherProperty,_nameAlias);
 						}
-						nameAlias.addClassLastBox();
+						_nameAlias.addClassLastBox();
 					},
 					complete: function(){
 						var $lastImg = $(".last img");
 						$lastImg.load(function(){
-							nameAlias.removeLoading();
-							nameAlias.anime();
+							_nameAlias.removeLoading();
+							_nameAlias.anime();
 						});
 					}
 				});
 			},
 
-			case_single: function(data,value,property,nameAlias){
+			case_single: function(data,value,property,_nameAlias){
 				if(value == 'all'){
-					nameAlias.getDataAll(data);
+					_nameAlias.getDataAll(data);
 				}else{
-					nameAlias.getDataFilter(data,value,property);
+					_nameAlias.getDataFilter(data,value,property);
 				}
 			},
 
-			case_dual: function(data,value,property,othrValue,otherProperty,nameAlias){
+			case_dual: function(data,value,property,othrValue,otherProperty,_nameAlias){
 				if(value == 'all' && othrValue == 'all'){
-					nameAlias.getDataAll(data);
+					_nameAlias.getDataAll(data);
 				}else if(value == 'all' || othrValue == 'all'){
-					nameAlias.getDataFilter(data,othrValue,otherProperty);
+					_nameAlias.getDataFilter(data,othrValue,otherProperty);
 				}else{
-					nameAlias.getDataPluralFilter(data,value,property,othrValue,otherProperty);
+					_nameAlias.getDataPluralFilter(data,value,property,othrValue,otherProperty);
 				}
 			}
 		},

@@ -4,8 +4,6 @@
 
 App.DataBind = (function(window,$){
 
-	var nameAlias = App.DataBind;
-
 	function _Item(dataFilter,i,$_list){
 		this.member_id = dataFilter[i].member_id;
 		this.member_name = dataFilter[i].member_name;
@@ -53,8 +51,6 @@ App.DataBind = (function(window,$){
 		},
 
 		change:{
-
-			_nameAlias: nameAlias,
 
 			init: function(jsonPath){
 				var _nameAlias = App.DataBind;

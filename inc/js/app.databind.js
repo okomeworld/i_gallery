@@ -202,7 +202,7 @@ App.DataBind = (function(window,$){
 				};
 
 				var array = array.filter(function (x, i, self) {
-					return self.indexOf(x) === i && i !== self.lastIndexOf(x);
+					return self.indexOf(x) === i;
 				});
 
 				var len = array.length

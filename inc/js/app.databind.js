@@ -4,6 +4,7 @@
 
 App.DataBind = (function(window,$){
 
+	//オブジェクトを管理
 	function _Item(dataFilter,i,$_list){
 		this.member_id = dataFilter[i].member_id;
 		this.member_name = dataFilter[i].member_name;
@@ -25,6 +26,7 @@ App.DataBind = (function(window,$){
 
 	var _DataBind = {
 
+		//初期化処理
 		init: function(jsonPath){
 			var that = this;
 
@@ -50,8 +52,10 @@ App.DataBind = (function(window,$){
 			});
 		},
 
+		//セレクトボックスが変更された時の処理
 		change:{
 
+			//初期化
 			init: function(jsonPath){
 				var _nameAlias = App.DataBind;
 				var that = this;
@@ -73,6 +77,7 @@ App.DataBind = (function(window,$){
 				});
 			},
 
+			//Ajax通信通訊時の処理
 			ajax: function(value,property,othrValue,otherProperty,_nameAlias,jsonPath){
 				var that = this;
 
@@ -99,6 +104,7 @@ App.DataBind = (function(window,$){
 				});
 			},
 
+			//セレクトボックス単体ソートの場合の処理
 			case_single: function(data,value,property,_nameAlias){
 				if(value == 'all'){
 					_nameAlias.getDataAll(data);
@@ -107,6 +113,7 @@ App.DataBind = (function(window,$){
 				}
 			},
 
+			//セレクトボックス複数ソートの場合の処理
 			case_dual: function(data,value,property,othrValue,otherProperty,_nameAlias){
 				if(value == 'all' && othrValue == 'all'){
 					_nameAlias.getDataAll(data);
@@ -118,11 +125,13 @@ App.DataBind = (function(window,$){
 			}
 		},
 
+		//全てのデータで配列を生成
 		getDataAll: function(data){
 			var dataFilter = data;
 			this.display(dataFilter);
 		},
 
+		//セレクトボックス単体でソートした場合の配列を生成
 		getDataFilter: function(data,value,property){
 			var dataAll = data;
 			var dataFilter = [];
@@ -135,6 +144,7 @@ App.DataBind = (function(window,$){
 			this.display(dataFilter);
 		},
 
+		//セレクトボックス複数でソートした場合の配列を生成
 		getDataPluralFilter: function(data,value,property,othrValue,otherProperty){
 			var dataAll = data;
 			var dataFilter = [];
@@ -158,6 +168,7 @@ App.DataBind = (function(window,$){
 			this.display(dataFilter);
 		},
 
+		//配列を受け取りオブジェクトをインスタンス化
 		display: function(dataFilter){
 			var len = dataFilter.length;
 			var $_list = $('#gallery');
@@ -167,40 +178,50 @@ App.DataBind = (function(window,$){
 			};
 		},
 
+		//最後のボックスにクラスを追加
 		addClassLastBox :function(){
 			var $box_last = $('.box:last-child');
 			$box_last.addClass('last');
 		},
 
+		//CSS3アニメーションのトリガーとなるクラスを追加
 		anime: function(){
 			var $box = $('.box');
 			$box.addClass('anime_in');
 		},
 
+		//ローディング画面を表示
 		showLoading: function(){
 			var $loading = $('#loading');
 			$loading.show();
 		},
 
+		//ローディング画面を非表示
 		removeLoading: function(){
 			var $loading = $('#loading');
 			$loading.fadeOut();
 		},
 
+		//セレクトボックス内のoptionを生成
 		addSelectList:{
 
+			//初期化
 			init: function(data){
 				this.util(data,'item_category','#category')
 				this.util(data,'member_name','#name')
 			},
 
+			//JSONデータよりセレクトボックス用の配列を生成
 			util: function(data, category, selector){
+
+				//特定の項目のみの配列を生成
 				var len = data.length;
 				var array = [];
 				for (var i = 0; i < len; i++) {
 					array.push(data[i][category]);
 				};
 
+				//重複した項目を削除
 				var array = array.filter(function (x, i, self) {
 					return self.indexOf(x) === i;
 				});
@@ -213,6 +234,7 @@ App.DataBind = (function(window,$){
 			}
 		},
 
+		//大画像をプリロードする処理
 		preload: function(){
 			$('.expand img').each(function() {
 				var src = $(this).attr('src');

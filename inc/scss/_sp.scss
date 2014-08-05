@@ -4,17 +4,27 @@
 ----------------------------------*/
 @media screen and (max-width: 640px) {
 	.search_box{
-
-		select{
+		label{
 			font-size: 10px;
-			vertical-align: middle;
+			&:before{
+				top: 16px;
+				right: 16px;
+			}
+			&:after{
+				top: 16px;
+				right: 12px;
+			}
+		}
+		select{
+			font-size: 12px;
 			margin-right: 5px;
+			padding: 6px 24px 6px 6px;
+			vertical-align: middle;
 		}
 	}
 
 	#gallery{
 		.box{
-			font-size: 10px;
 			margin: 10px;
 			img{
 				width: 80px;

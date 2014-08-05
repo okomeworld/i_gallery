@@ -26,7 +26,7 @@ App.DataBind = (function(window,$){
 
 	var _DataBind = {
 
-		//初期化処理
+		//初期化
 		init: function(jsonPath){
 			var that = this;
 
@@ -57,7 +57,6 @@ App.DataBind = (function(window,$){
 
 			//初期化
 			init: function(jsonPath){
-				var _nameAlias = App.DataBind;
 				var that = this;
 				var $name = $('#name');
 				var $category = $('#category');
@@ -65,20 +64,20 @@ App.DataBind = (function(window,$){
 				$name .on('change submit',function(){
 					var value = $(this).val();
 					var othrValue = $category.val();
-					_nameAlias.showLoading();
-					that.ajax(value,'member_name',othrValue,'item_category',_nameAlias,jsonPath);
+					_DataBind.showLoading();
+					that.ajax(value,'member_name',othrValue,'item_category',_DataBind,jsonPath);
 				});
 
 				$category.on('change',function(){
 					var value = $(this).val();
 					var othrValue = $name.val();
-					_nameAlias.showLoading();
-					that.ajax(value,'item_category',othrValue,'member_name',_nameAlias,jsonPath);
+					_DataBind.showLoading();
+					that.ajax(value,'item_category',othrValue,'member_name',_DataBind,jsonPath);
 				});
 			},
 
-			//Ajax通信通訊時の処理
-			ajax: function(value,property,othrValue,otherProperty,_nameAlias,jsonPath){
+			//Ajax通信の処理
+			ajax: function(value,property,othrValue,otherProperty,_DataBind,jsonPath){
 				var that = this;
 
 				$.ajax({
@@ -88,39 +87,39 @@ App.DataBind = (function(window,$){
 					dataType: 'json',
 					success: function(json){
 						if(othrValue == 'all'){
-							that.case_single(json,value,property,_nameAlias);
+							that.case_single(json,value,property,_DataBind);
 						}else{
-							that.case_dual(json,value,property,othrValue,otherProperty,_nameAlias);
+							that.case_dual(json,value,property,othrValue,otherProperty,_DataBind);
 						}
-						_nameAlias.addClassLastBox();
+						_DataBind.addClassLastBox();
 					},
 					complete: function(){
 						var $lastImg = $(".last img");
 						$lastImg.load(function(){
-							_nameAlias.removeLoading();
-							_nameAlias.anime();
+							_DataBind.removeLoading();
+							_DataBind.anime();
 						});
 					}
 				});
 			},
 
 			//セレクトボックス単体ソートの場合の処理
-			case_single: function(data,value,property,_nameAlias){
+			case_single: function(data,value,property,_DataBind){
 				if(value == 'all'){
-					_nameAlias.getDataAll(data);
+					_DataBind.getDataAll(data);
 				}else{
-					_nameAlias.getDataFilter(data,value,property);
+					_DataBind.getDataFilter(data,value,property);
 				}
 			},
 
 			//セレクトボックス複数ソートの場合の処理
-			case_dual: function(data,value,property,othrValue,otherProperty,_nameAlias){
+			case_dual: function(data,value,property,othrValue,otherProperty,_DataBind){
 				if(value == 'all' && othrValue == 'all'){
-					_nameAlias.getDataAll(data);
+					_DataBind.getDataAll(data);
 				}else if(value == 'all' || othrValue == 'all'){
-					_nameAlias.getDataFilter(data,othrValue,otherProperty);
+					_DataBind.getDataFilter(data,othrValue,otherProperty);
 				}else{
-					_nameAlias.getDataPluralFilter(data,value,property,othrValue,otherProperty);
+					_DataBind.getDataPluralFilter(data,value,property,othrValue,otherProperty);
 				}
 			}
 		},

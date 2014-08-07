@@ -1,18 +1,22 @@
+/**
+ * データを扱うクラス。いわゆるモデル
+ */
 ;(function($){
 	
 	App.Items = function(json_url){
 
 		var that = this;
 
-		this.attribute_keys = {
-			'category' : 'item_category',
-			'name'     : 'item_name',
-		};
+		// 同期通信でデータ取得する
+		$.ajaxSetup({ async : false });
 
 		$.getJSON(json_url, function(data){
 			that._gettable_data = that._data = data;
 			that.init();
 		});
+
+		// 非同期通信の状態に戻す
+		$.ajaxSetup({ async : true });
 	}
 
 	App.Items.prototype = {

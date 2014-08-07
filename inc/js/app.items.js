@@ -75,23 +75,23 @@
 			return (this.get_current_index() > this.first_index);
 		},
 
-		get_all_attributes : function(attr_type){
+		get_all_attributes : function(attr_key){
 			var that = this;
 			return $.unique(this._data.map(function(val){
-				return val[that.attribute_keys[attr_type]];
+				return val[attr_key];
 			}));
 		},
 
-		filter_by_attibutes : function(attrs){
+		filter : function(conditions){
 			var that = this;
 			var result_data = this._data;
-			
-			for (var key in attrs) {
-				var attribute_key = that.attribute_keys[key];
-				if (!attribute_key) continue;
-				result_data = result_data.filter(function(val){
-					return (val[attribute_key] == attrs[key]);
-				});
+
+			if(conditions) {
+				for (var key in conditions) {
+					result_data = result_data.filter(function(val){
+						return (val[key] == conditions[key]);
+					});
+				}
 			}
 
 			this._gettable_data = result_data;

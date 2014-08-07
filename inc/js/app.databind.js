@@ -19,6 +19,7 @@ App.DataBind = (function(window,$){
 
 	var _DataBind = {
 
+		// 初期化
 		init: function(items){
 			if(!items instanceof App.Items) {
 				throw ReferenceError('items is not App.Items instance');
@@ -30,6 +31,7 @@ App.DataBind = (function(window,$){
 			this.addSelectList();
 		},
 
+		// フィルタリング機能をDOMに実装
 		implement_change : function(){
 			var that = this;
 
@@ -52,6 +54,7 @@ App.DataBind = (function(window,$){
 
 		},
 
+		// データリストをレンダリング
 		display: function(){
 			var that = this;
 			var items_data = this.items.get_all();
@@ -77,6 +80,7 @@ App.DataBind = (function(window,$){
 
 		},
 
+		// フィルタリングのプルダウンをレンダリング
 		addSelectList : function(){
 			var that = this;
 
@@ -91,26 +95,31 @@ App.DataBind = (function(window,$){
 
 		},
 
+		// レンダリングしたデータ一覧の末にclassを追加
 		addClassLastBox :function(){
 			var $box_last = $('.box:last-child');
 			$box_last.addClass('last');
 		},
 
+		// CSS3アニメーションのトリガーとなるクラスを追加
 		anime: function(){
 			var $box = $('.box');
 			$box.addClass('anime_in');
 		},
 
+		// ローディング画面を表示 
 		showLoading: function(){
 			var $loading = $('#loading');
 			$loading.show();
 		},
 
+		// ローディング画面を消す
 		removeLoading: function(){
 			var $loading = $('#loading');
 			$loading.fadeOut();
 		},
 
+		// 大画像をプリロード
 		preload: function(){
 			$('.expand img').each(function() {
 				var src = $(this).attr('src');

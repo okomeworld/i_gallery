@@ -1,0 +1,70 @@
+@charset 'utf-8';
+/*----------------------------------
+	gallery
+----------------------------------*/
+#gallery {
+	.box{
+		font-size: 12px;
+		display: none;
+		margin: 15px;
+		img{
+			overflow: hidden;
+			width: 200px;
+			height: auto;
+			-webkit-border-radius: 10px;
+			-webkit-box-shadow: 0 0 1px rgba(#000,.8);
+
+			@include box-sizing;
+		}
+	}
+	.anime_in{
+		display: inline-block;
+		-webkit-animation: anime_in .5s;
+		img{
+			//-webkit-animation: animeImg_in .5s;
+			-webkit-box-reflect: below 0 -webkit-gradient(linear, 0 0, 0 170%, from(transparent), color-stop(.5, transparent), to(rgba(0,0,0,.8)));
+		}
+	}
+}
+
+.exBox{
+	position: absolute;
+	z-index: 1000;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	-webkit-animation: exBox_in .2s;
+	background-color: rgba(#000, .8);
+	img{
+		display: none;
+		max-width: 100%;
+		max-height: 100%;
+		vertical-align: middle;
+		-webkit-box-shadow: 0 0 10px rgba(#000,.8);
+	}
+	.btn{
+		font-size: 14px;
+		font-weight: bold;
+		position: fixed;
+		bottom: 10px;
+		display: inline-block;
+		width: 100px;
+		padding: 3px 0;
+		text-decoration: none;
+		opacity: .8;
+		color: #fff;
+		border: 1px solid #fff;
+		border-radius: 5px;
+	}
+	.next{
+		right: 10px;
+	}
+	.prev{
+		left: 10px;
+	}
+	.anime_in{
+		display: inline;
+		-webkit-animation: anime_in .5s;
+	}
+}

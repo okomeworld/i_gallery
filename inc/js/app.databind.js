@@ -4,236 +4,122 @@
 
 App.DataBind = (function(window,$){
 
-	//オブジェクトを管理
-	function _Item(dataFilter,i,$_list){
-		this.member_id = dataFilter[i].member_id;
-		this.member_name = dataFilter[i].member_name;
-		this.item_id = dataFilter[i].item_id;
-		this.item_name = dataFilter[i].item_name;
-		this.item_category = dataFilter[i].item_category;
-		this.item_src = dataFilter[i].item_src;
-		this.addList($_list);
-	}
-
-	_Item.prototype.addList = function($_list){
-		$_list.append(
-			'<li class="box">'
-			+'<div class="caption"><a href="inc/img/b/' + this.item_src + '" class="expand"><img src="inc/img/t/' + this.item_src + '" /></a></div>'
-			+'<div class="capture">' + this.member_name + '<br />' + this.item_category + '</div>'
-			+'</li>'
-		);
-	}
+	// addSelectList用の設定項目
+	// App.Configとか作ってまとめたほうがよさげ
+	var SELECT_LIST_CONFIGS = [
+		{
+			'attr_key'        : 'item_category',
+			'target_selector' : '#category',
+		},
+		{
+			'attr_key'        : 'member_name',
+			'target_selector' : '#name',
+		}
+	];
 
 	var _DataBind = {
 
-		//初期化
-		init: function(jsonPath){
+		// 初期化
+		init: function(items){
+			if(!items instanceof App.Items) {
+				throw ReferenceError('items is not App.Items instance');
+			}
+
+			this.items = items;
+
+			this.display();
+			this.addSelectList();
+		},
+
+		// フィルタリング機能をDOMに実装
+		implement_change : function(){
 			var that = this;
 
-			$.ajax({
-				url: jsonPath,
-				type: 'GET',
-				cache: false,
-				dataType: 'json',
-				success: function(json){
-					that.getDataAll(json);
-					that.addSelectList.init(json);
-					that.addClassLastBox();
-				},
-				complete: function(json){
-					var $lastImg = $(".last img");
+			var $name = $('#name');
+			var $category = $('#category');
 
-					$lastImg.load(function(){
-						that.removeLoading();
-						that.anime();
-						that.preload();
-					});
-				}
-			});
-		},
+			var callback = function(){
+				var conditions = {};
+				if($name.val() != 'all') conditions['member_name'] = $name.val();
+				if($category.val() != 'all') conditions['item_category'] = $category.val();
+	
+				that.items.filter(conditions);
+				console.log(that.items);
 
-		//セレクトボックスが変更された時の処理
-		change:{
-
-			//初期化
-			init: function(jsonPath){
-				var that = this;
-				var $name = $('#name');
-				var $category = $('#category');
-
-				$name .on('change submit',function(){
-					var value = $(this).val();
-					var othrValue = $category.val();
-					_DataBind.showLoading();
-					that.ajax(value,'member_name',othrValue,'item_category',_DataBind,jsonPath);
-				});
-
-				$category.on('change',function(){
-					var value = $(this).val();
-					var othrValue = $name.val();
-					_DataBind.showLoading();
-					that.ajax(value,'item_category',othrValue,'member_name',_DataBind,jsonPath);
-				});
-			},
-
-			//Ajax通信の処理
-			ajax: function(value,property,othrValue,otherProperty,_DataBind,jsonPath){
-				var that = this;
-
-				$.ajax({
-					url: jsonPath,
-					type: 'GET',
-					cache: false,
-					dataType: 'json',
-					success: function(json){
-						if(othrValue == 'all'){
-							that.case_single(json,value,property,_DataBind);
-						}else{
-							that.case_dual(json,value,property,othrValue,otherProperty,_DataBind);
-						}
-						_DataBind.addClassLastBox();
-					},
-					complete: function(){
-						var $lastImg = $(".last img");
-						$lastImg.load(function(){
-							_DataBind.removeLoading();
-							_DataBind.anime();
-						});
-					}
-				});
-			},
-
-			//セレクトボックス単体ソートの場合の処理
-			case_single: function(data,value,property,_DataBind){
-				if(value == 'all'){
-					_DataBind.getDataAll(data);
-				}else{
-					_DataBind.getDataFilter(data,value,property);
-				}
-			},
-
-			//セレクトボックス複数ソートの場合の処理
-			case_dual: function(data,value,property,othrValue,otherProperty,_DataBind){
-				if(value == 'all' && othrValue == 'all'){
-					_DataBind.getDataAll(data);
-				}else if(value == 'all' || othrValue == 'all'){
-					_DataBind.getDataFilter(data,othrValue,otherProperty);
-				}else{
-					_DataBind.getDataPluralFilter(data,value,property,othrValue,otherProperty);
-				}
-			}
-		},
-
-		//全てのデータで配列を生成
-		getDataAll: function(data){
-			var dataFilter = data;
-			this.display(dataFilter);
-		},
-
-		//セレクトボックス単体でソートした場合の配列を生成
-		getDataFilter: function(data,value,property){
-			var dataAll = data;
-			var dataFilter = [];
-			var str = new RegExp(value,'i');
-			dataFilter = dataAll.filter(function(item,index){
-				if(item[property].match(str)){
-					return true;
-				};
-			});
-			this.display(dataFilter);
-		},
-
-		//セレクトボックス複数でソートした場合の配列を生成
-		getDataPluralFilter: function(data,value,property,othrValue,otherProperty){
-			var dataAll = data;
-			var dataFilter = [];
-			var otherStr = new RegExp(othrValue,'i');
-			var str = new RegExp(value,'i');
-			dataFilter = dataAll.filter(function(item,index){
-				if(item[otherProperty].match(otherStr)){
-					return true;
-				};
-			}).filter(function(item,index){
-				if (item[property].match(str)){
-					return true;
-				};
-			});
-
-			if(dataFilter.length === 0){
-				this.removeLoading();
-				alert('データがありません');
+				that.display();
 			}
 
-			this.display(dataFilter);
+			$name.on('change submit', callback);
+			$category.on('change', callback);
+
 		},
 
-		//配列を受け取りオブジェクトをインスタンス化
-		display: function(dataFilter){
-			var len = dataFilter.length;
+		// データリストをレンダリング
+		display: function(){
+			var that = this;
+			var items_data = this.items.get_all();
+
+			console.log(items_data);
 			var $_list = $('#gallery');
 			$_list.empty();
-			for (var i = 0; i < len; i++) {
-				new _Item(dataFilter,i,$_list);
-			};
+			items_data.forEach(function(item){
+				$_list.append(
+					'<li class="box">'
+					+'<div class="caption"><a href="inc/img/b/' + item.item_src + '" class="expand"><img src="inc/img/t/' + item.item_src + '" /></a></div>'
+					+'<div class="capture">' + item.member_name + '<br />' + item.item_category + '</div>'
+					+'</li>'
+				);
+			});
+
+			this.addClassLastBox();
+			$(".last img").load(function(){
+				that.removeLoading();
+				that.anime();
+				that.preload();
+			});
+
 		},
 
-		//最後のボックスにクラスを追加
+		// フィルタリングのプルダウンをレンダリング
+		addSelectList : function(){
+			var that = this;
+
+			SELECT_LIST_CONFIGS.forEach(function(config){
+				var $target = $(config.target_selector);
+				var all_attributes = that.items.get_all_attributes(config.attr_key);
+
+				all_attributes.forEach(function(attribute){
+					$target.append("<option value='" + attribute + "'>" + attribute + "</option>");
+				});
+			});
+
+		},
+
+		// レンダリングしたデータ一覧の末にclassを追加
 		addClassLastBox :function(){
 			var $box_last = $('.box:last-child');
 			$box_last.addClass('last');
 		},
 
-		//CSS3アニメーションのトリガーとなるクラスを追加
+		// CSS3アニメーションのトリガーとなるクラスを追加
 		anime: function(){
 			var $box = $('.box');
 			$box.addClass('anime_in');
 		},
 
-		//ローディング画面を表示
+		// ローディング画面を表示 
 		showLoading: function(){
 			var $loading = $('#loading');
 			$loading.show();
 		},
 
-		//ローディング画面を非表示
+		// ローディング画面を消す
 		removeLoading: function(){
 			var $loading = $('#loading');
 			$loading.fadeOut();
 		},
 
-		//セレクトボックス内のoptionを生成
-		addSelectList:{
-
-			//初期化
-			init: function(data){
-				this.util(data,'item_category','#category')
-				this.util(data,'member_name','#name')
-			},
-
-			//JSONデータよりセレクトボックス用の配列を生成
-			util: function(data, category, selector){
-
-				//特定の項目のみの配列を生成
-				var len = data.length;
-				var array = [];
-				for (var i = 0; i < len; i++) {
-					array.push(data[i][category]);
-				};
-
-				//重複した項目を削除
-				var array = array.filter(function (x, i, self) {
-					return self.indexOf(x) === i;
-				});
-
-				var len = array.length
-				for (var i = 0; i < len; i++){
-					var $selector = $(selector)
-					$selector.append("<option value='" + array[i] + "'>" + array[i] + "</option>");
-				}
-			}
-		},
-
-		//大画像をプリロードする処理
+		// 大画像をプリロード
 		preload: function(){
 			$('.expand img').each(function() {
 				var src = $(this).attr('src');
